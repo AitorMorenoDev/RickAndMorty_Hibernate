@@ -4,9 +4,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
-import org.example.entity.Characters;
-import org.example.entity.Episode;
-import org.example.entity.Location;
 import org.example.management.Menus;
 
 public class App
@@ -20,10 +17,8 @@ public class App
         try {
             transaction.begin();
 
-            Characters character = new Characters();
-            Episode episode = new Episode();
-            Location location = new Location();
-
+            System.out.println("Welcome to the Rick & Morty™ Hibernate API! \uD83D\uDCFA"); // 📺
+            Menus.mainMenu();
 
             transaction.commit();
         } catch (Exception e) {
@@ -36,8 +31,5 @@ public class App
             entityManager.close();
             entityManagerFactory.close();
         }
-
-        System.out.println("Welcome to the Rick & Morty™ Hibernate API! \uD83D\uDCFA"); // 📺
-        Menus.mainMenu();
     }
 }

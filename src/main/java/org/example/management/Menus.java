@@ -1,5 +1,4 @@
 package org.example.management;
-
 import java.util.Scanner;
 
 import static org.example.management.CharManagement.*;
