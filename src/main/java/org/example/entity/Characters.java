@@ -1,7 +1,6 @@
 package org.example.entity;
 
 import jakarta.persistence.*;
-import org.hibernate.boot.jaxb.Origin;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -17,6 +16,10 @@ public class Characters implements Serializable {
     private Location idLocation = new Location();
 
     public Characters() {
+    }
+
+    public Characters(int id) {
+        this.id = id;
     }
 
     // --------------------------------------------------------------

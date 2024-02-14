@@ -1,4 +1,5 @@
 package org.example.management;
+
 import java.util.Scanner;
 
 import static org.example.management.CharManagement.*;
@@ -46,16 +47,16 @@ public class Menus {
 
             switch (option) {
                 case "1":
-                    SearchCharacterMenu();
+                    searchCharacterMenu();
                     break;
                 case "2":
-                    AddChar();
+                    addChar();
                     break;
                 case "3":
-                    EditChar();
+                    editChar();
                     break;
                 case "4":
-                    DeleteChar();
+                    deleteChar();
                     break;
                 case "B":
                     break;
@@ -74,7 +75,7 @@ public class Menus {
 
             switch (option) {
                 case "1":
-                    SearchLocationMenu();
+                    searchLocationMenu();
                     break;
                 case "2":
                     AddLocation();
@@ -102,7 +103,7 @@ public class Menus {
 
             switch (option) {
                 case "1":
-                    SearchEpisodeMenu();
+                    searchEpisodeMenu();
                     break;
                 case "2":
                     AddEpisode();
@@ -123,7 +124,7 @@ public class Menus {
     }
 
     //Second level menu
-    private static void SearchCharacterMenu() {
+    private static void searchCharacterMenu() {
         String option;
         do {
             showSearchSubMenu("character");
@@ -131,10 +132,10 @@ public class Menus {
 
             switch (option) {
                 case "1":
-                    SearchCharByText();
+                    searchCharByText();
                     break;
                 case "2":
-                    SearchCharWithoutEpisodes();
+                    searchCharWithoutEpisodes();
                     break;
                 case "B":
                     break;
@@ -145,7 +146,7 @@ public class Menus {
         } while (!option.equals("B"));
     }
 
-    private static void SearchLocationMenu() {
+    private static void searchLocationMenu() {
         String option;
         do {
             showSearchSubMenu("location");
@@ -167,7 +168,7 @@ public class Menus {
         } while (!option.equals("B"));
     }
 
-    private static void SearchEpisodeMenu() {
+    private static void searchEpisodeMenu() {
         String option;
         do {
             showSearchSubMenu("episode");

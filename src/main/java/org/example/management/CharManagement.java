@@ -1,10 +1,7 @@
 package org.example.management;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Persistence;
 import org.example.entity.Characters;
+import org.example.entity.Location;
 
 import java.util.Scanner;
 
@@ -13,63 +10,91 @@ public class CharManagement {
     private static final Scanner sc = new Scanner(System.in);
 
     // Add
-    public static void AddChar() {
-        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("default");
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-        Characters character = askForChar();
-
-        try {
-            transaction.begin();
-            entityManager.persist(character);
-            transaction.commit();
-        } catch (Exception e) {
-            transaction.rollback();
-            e.printStackTrace();
-        }
-    }
-    public static Characters askForChar() {
+    private static Characters askForCharToAdd() {
 
         Characters character = new Characters();
+
+        character.setId(GeneralManagement.getMaxIdChar() + 1);
+        character.setName(GeneralManagement.askForInput("name"));
+        character.setStatus(askForStatus());
+        character.setSpecies(askForSpecies());
+        character.setType(GeneralManagement.askForInput("type"));
+        character.setGender(askForGender());
+        character.setIdOrigin(askForLocation("origin"));
+        character.setIdLocation(askForLocation("location"));
+
+        return character;
+    }
+    public static void addChar() {
+        Characters character = askForCharToAdd();
+        GeneralManagement.add(character);
+    }
+
+    // Edit and Delete
+    public static void editChar() {
+
+        Characters character = GeneralManagement.askForEntityToEditOrDelete("edit", Characters.class);
+
+        assert character != null;
+
+        if (GeneralManagement.askForFieldToEditOrNot("name")) { character.setName(GeneralManagement.askForInput("name")); }
+        if (GeneralManagement.askForFieldToEditOrNot("status")) { character.setStatus(askForStatus()); }
+        if (GeneralManagement.askForFieldToEditOrNot("species")) { character.setSpecies(askForSpecies()); }
+        if (GeneralManagement.askForFieldToEditOrNot("gender")) { character.setGender(askForGender()); }
+        if (GeneralManagement.askForFieldToEditOrNot("type")) { character.setType(GeneralManagement.askForInput("type")); }
+        if (GeneralManagement.askForFieldToEditOrNot("origin")) { character.setIdOrigin(askForLocation("origin")); }
+        if (GeneralManagement.askForFieldToEditOrNot("location")) { character.setIdLocation(askForLocation("location")); }
+
+        GeneralManagement.edit(character);
+        System.out.println("Character with Id " + character.getId() + " updated successfully.");
+    }
+    public static void deleteChar() {
+        Characters character = GeneralManagement.askForEntityToEditOrDelete("delete", Characters.class);
+
+        assert character != null;
+        if (GeneralManagement.askToDeleteChar(character).equalsIgnoreCase("y")) {
+            GeneralManagement.delete(character);
+            System.out.println("Character " + character.getName() + " deleted.");
+        } else {
+            System.out.println("Character " + character.getName() + " not deleted.");
+        }
+    }
+
+    // Search
+    public static void searchCharByText() {
+        GeneralManagement.searchByText(Characters.class);
+    }
+    public static void searchCharWithoutEpisodes() {
+        GeneralManagement.charsWithoutEpisodes();
+    }
+
+
+    // Auxiliary methods
+    private static String askForStatus() {
         int choice;
-
-        // Set id
-        // ID = Ver cuantos hay en la base de datos
-        // character.setId(ID + 1);
-
-        // Name
-        System.out.println("Enter the name: ");
-        character.setName(sc.nextLine());
-
-        // Status
         do {
             System.out.println("---------------------------------");
-            System.out.println("Choose the status: ");
             System.out.println("1. Alive");
             System.out.println("2. Dead");
             System.out.println("3. Unknown");
+            System.out.println();
+            System.out.print("Choose the status: ");
             choice = sc.nextInt();
+        } while (choice < 1 || choice > 3);
 
-            switch (choice) {
-                case 1:
-                    character.setStatus("Alive");
-                    break;
-                case 2:
-                    character.setStatus("Dead");
-                    break;
-                case 3:
-                    character.setStatus("Unknown");
-                    break;
-                default:
-                    System.out.println("Invalid option");
-                    System.out.println();
-            }
-        } while (choice != 1 && choice != 2 && choice != 3);
+        sc.nextLine();
 
-        // Species
+        switch (choice) {
+            case 1: return "Alive";
+            case 2: return "Dead";
+            case 3: return "Unknown";
+            default: return null;
+        }
+    }
+    private static String askForSpecies() {
+        int choice;
         do {
             System.out.println("---------------------------------");
-            System.out.println("Choose the species: ");
             System.out.println("1. Alien");
             System.out.println("2. Animal");
             System.out.println("3. Cronenberg");
@@ -80,107 +105,70 @@ public class CharManagement {
             System.out.println("8. Poopybutthole");
             System.out.println("9. Robot");
             System.out.println("10. Unknown");
+            System.out.println();
+            System.out.print("Choose the species: ");
             choice = sc.nextInt();
+        } while (choice < 1 || choice > 10);
 
-            switch(choice) {
-                case 1:
-                    character.setSpecies("Alien");
-                    break;
-                case 2:
-                    character.setSpecies("Animal");
-                    break;
-                case 3:
-                    character.setSpecies("Cronenberg");
-                    break;
-                case 4:
-                    character.setSpecies("Disease");
-                    break;
-                case 5:
-                    character.setSpecies("Human");
-                    break;
-                case 6:
-                    character.setSpecies("Humanoid");
-                    break;
-                case 7:
-                    character.setSpecies("Mythological Creature");
-                    break;
-                case 8:
-                    character.setSpecies("Poopybutthole");
-                    break;
-                case 9:
-                    character.setSpecies("Robot");
-                    break;
-                case 10:
-                    character.setSpecies("Unknown");
-                    break;
-                default:
-                    System.out.println("Invalid option");
-                    System.out.println();
-            }
-        } while (choice != 1 && choice != 2 && choice != 3 && choice != 4 && choice != 5 && choice != 6 && choice != 7 && choice != 8 && choice != 9 && choice != 10);
+        sc.nextLine();
 
-        // Type
-        System.out.println("Enter the type: ");
-        character.setType(sc.nextLine());
-
-        // Gender
+        switch(choice) {
+            case 1: return "Alien";
+            case 2: return "Animal";
+            case 3: return "Cronenberg";
+            case 4: return "Disease";
+            case 5: return "Human";
+            case 6: return "Humanoid";
+            case 7: return "Mythological Creature";
+            case 8: return "Poopybutthole";
+            case 9: return "Robot";
+            case 10: return "Unknown";
+            default: return null;
+        }
+    }
+    private static String askForGender() {
+        int choice;
         do {
             System.out.println("---------------------------------");
-            System.out.println("Choose the gender");
             System.out.println("1. Male");
             System.out.println("2. Female");
             System.out.println("3. Genderless");
             System.out.println("4. Unknown");
+            System.out.println();
+            System.out.print("Choose the gender: ");
             choice = sc.nextInt();
+        } while (choice < 1 || choice > 4);
 
-            switch (choice) {
-                case 1:
-                    character.setGender("Male");
-                    break;
-                case 2:
-                    character.setGender("Female");
-                    break;
-                case 3:
-                    character.setGender("Genderless");
-                    break;
-                case 4:
-                    character.setGender("Unknown");
-                    break;
-                default:
-                    System.out.println("Invalid option");
-                    System.out.println();
+        sc.nextLine();
+
+        switch (choice) {
+            case 1: return "Male";
+            case 2: return "Female";
+            case 3: return "Genderless";
+            case 4: return "Unknown";
+            default: return null;
+        }
+    }
+    private static Location askForLocation(String type) {
+        int index = 0;
+        for (Location location: GeneralManagement.getLocations()) {
+            System.out.println(index + " - " + location.getName());
+            index++;
+        }
+
+        System.out.print("Choose the " + type + ": ");
+        int response;
+
+        do {
+            response = sc.nextInt();
+            if (response > GeneralManagement.getMaxIdLocation() || response < 0) {
+                System.out.println("Invalid option. Enter a valid option.");
             }
-        } while (choice != 1 && choice != 2 && choice != 3 && choice != 4);
+        } while (response > GeneralManagement.getMaxIdLocation() || response < 0);
 
-        // IdOrigin
-        System.out.println("Enter the id of the origin: ");
+        sc.nextLine();
 
-        // IdLocation
-        System.out.println("Enter the id of the location: ");
-
-        return character;
-    }
-
-    // Edit
-    public static void EditChar() {
-        System.out.println("EditCharacter");
-    }
-    public static void AskForEdit() {
-        System.out.println("AskForEdit");
-    }
-
-    // Delete
-    public static void DeleteChar() {
-        System.out.println("DeleteCharacter");
-    }
-
-    // Search
-    public static void SearchCharByText() {
-        System.out.println("SearchCharacterByText");
-    }
-
-    public static void SearchCharWithoutEpisodes() {
-        System.out.println("SearchCharacterWithoutEpisodes");
+        return new Location (response);
     }
 }
 

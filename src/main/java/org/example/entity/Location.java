@@ -14,6 +14,13 @@ public class Location implements Serializable {
     private String name, type, dimension;
     private Set<Characters> charactersLocation = new HashSet<>(0);
 
+    public Location () {
+    }
+
+    public Location(int id) {
+      this.id = id;
+    }
+
     @Id
     @Column(name = "id")
 

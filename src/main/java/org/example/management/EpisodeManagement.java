@@ -21,4 +21,6 @@ public class EpisodeManagement {
         public static void SearchEpisodeMostChars() {
             System.out.println("SearchEpisodeByDate");
         }
+
+        // OJO!!!!! NATIVE QUERYS EN BUSQUEDAS!!!
 }
