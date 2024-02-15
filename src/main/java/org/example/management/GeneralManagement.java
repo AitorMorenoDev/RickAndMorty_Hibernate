@@ -4,6 +4,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import org.example.entity.Characters;
 import org.example.entity.Episode;
 import org.example.entity.Location;
+import org.hibernate.query.NativeQuery;
 
 import java.util.List;
 import java.util.Scanner;
@@ -146,10 +147,10 @@ public class GeneralManagement {
         }
         assert character != null;
         if (character.getEpisodes().isEmpty()) {
-            System.out.print("Are you sure you want to delete " + character.getName() + "? (y to confirm, any other key to cancel)");
+            System.out.print("Are you sure you want to delete " + character.getName() + "? (y to confirm, any other key to cancel): ");
         } else {
             System.out.print("Character " + character.getName() +
-                    " has episodes related. Are you sure you want to delete it? (y to confirm, any other key to cancel)");
+                    " has episodes related. Are you sure you want to delete it? (y to confirm, any other key to cancel): ");
         }
         return sc.nextLine();
     }
@@ -159,7 +160,7 @@ public class GeneralManagement {
         }
 
         assert location != null;
-        System.out.print("Are you sure you want to delete " + location.getName() + "? (y to confirm, any other key to cancel)");
+        System.out.print("Are you sure you want to delete " + location.getName() + "? (y to confirm, any other key to cancel): ");
         return sc.nextLine();
     }
     public static String askToDeleteEpisode (Episode episode) {
@@ -169,10 +170,10 @@ public class GeneralManagement {
 
         assert episode != null;
         if (episode.getCharacters().isEmpty()) {
-            System.out.print("Are you sure you want to delete " + episode.getName() + "? (y to confirm, any other key to cancel)");
+            System.out.print("Are you sure you want to delete " + episode.getName() + "? (y to confirm, any other key to cancel): ");
         } else {
             System.out.print("Episode " + episode.getName() +
-                    " has characters related. Are you sure you want to delete it? (y to confirm, any other key to cancel)");
+                    " has characters related. Are you sure you want to delete it? (y to confirm, any other key to cancel): ");
         }
         return sc.nextLine();
     }
@@ -188,11 +189,52 @@ public class GeneralManagement {
         }
     }
     public static void locationsWithoutCharacters() {
+        tearUp();
 
+        Query query = em.createQuery("from Location l where l.id not in (select c.idLocation from Characters c) " +
+                "and l.id not in (select c.idOrigin from Characters c)");
+        List<Location> locations = query.getResultList();
+        for (Location location: locations) {
+            System.out.println(location.getId() + " - " + location.getName());
+        }
     }
+    public static void searchEpisodesByText() {
+        // Search episodes by text using native query
+        System.out.print("Enter the text to search for episodes: ");
+        String text = sc.nextLine();
 
+        String sqlQuery = "SELECT * FROM episode WHERE lower(name) LIKE :text";
+
+        tearUp();
+        NativeQuery query = (NativeQuery) em.createNativeQuery(sqlQuery, Episode.class);
+        query.setParameter("text", "%" + text.toLowerCase() + "%");
+
+        List<Episode> episodes = query.getResultList();
+
+
+        if (episodes.isEmpty()) {
+            System.out.println("No episodes found with the name " + text);
+        } else {
+            for (Episode episode: episodes) {
+                System.out.println(episode.getId() + " - " + episode.getName() + " - " + episode.getEpisode());
+            }
+        }
+
+        tearDown();
+    }
     public static void episodeWithMostCharacters() {
+        tearUp();
 
+        String sqlQuery = "SELECT * from episode WHERE id in " +
+                "(SELECT id_episode from character_in_episode " +
+                "group by id_episode order by count(id_character) desc" +
+                " limit 1)";
+
+        NativeQuery query = (NativeQuery) em.createNativeQuery(sqlQuery, Episode.class);
+        Episode episode = (Episode) query.getSingleResult();
+        System.out.println("The episode with most characters is ["
+                + episode.getId() + " - " + episode.getName() + " - "
+                + episode.getEpisode() + "] with " + episode.getCharacters().size() + " characters.");
     }
 
 
@@ -203,13 +245,11 @@ public class GeneralManagement {
         cq.select(cq.from(entity));
         return em.createQuery(cq).getResultList();
     }
-
     public static int getMaxIdForEntity(Class<?> entityClass) {
         tearUp();
         Query query = em.createQuery("SELECT max (e.id) from " + entityClass.getSimpleName() + " e");
         return (int) query.getSingleResult();
     }
-
     public static String askForInput(String type) {
         String input;
         do {
@@ -224,7 +264,6 @@ public class GeneralManagement {
 
         return input;
     }
-
     public static Boolean askForFieldToEditOrNot(String type) {
         System.out.println("---------------------------------");
         System.out.print("Do you want to edit the " + type + "? (y to confirm, any other key to cancel): ");
@@ -240,15 +279,14 @@ public class GeneralManagement {
         Query query = em.createQuery("SELECT max (l.id) from Location l");
         return (int) query.getSingleResult();
     }
+    public static int getMaxIdEpisode() {
+        tearUp();
+        Query query = em.createQuery("SELECT max (e.id) from Episode e");
+        return (int) query.getSingleResult();
+    }
     public static List<Location> getLocations() {
         tearUp();
         Query query = em.createQuery("from Location");
         return query.getResultList();
     }
-    public static List<Characters> getCharacters() {
-        tearUp();
-        Query query = em.createQuery("from Characters");
-        return query.getResultList();
-    }
-
 }

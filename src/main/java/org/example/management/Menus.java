@@ -78,13 +78,13 @@ public class Menus {
                     searchLocationMenu();
                     break;
                 case "2":
-                    AddLocation();
+                    addLocation();
                     break;
                 case "3":
-                    EditLocation();
+                    editLocation();
                     break;
                 case "4":
-                    DeleteLocation();
+                    deleteLocation();
                     break;
                 case "B":
                     break;
@@ -154,7 +154,7 @@ public class Menus {
 
             switch (option) {
                 case "1":
-                    SearchLocationByText();
+                    searchLocationByText();
                     break;
                 case "2":
                     SearchLocationWithoutCharacters();
@@ -202,11 +202,11 @@ public class Menus {
 
     private static void showSubMenu(String dataType) {
         System.out.println("---------------------------------");
-        System.out.println("1. Search " + dataType + " \uD83D\uDD0D"); // 🔍a
+        System.out.println("1. Search " + dataType + " \uD83D\uDD0D"); // 🔍
         System.out.println("2. Add " + dataType + " ➕"); // ➕
         System.out.println("3. Edit " + dataType + " ✏️"); // ✏️
         System.out.println("4. Delete " + dataType + " \uD83D\uDDD1️"); // 🗑️
-        System.out.println("B. Back \uD83D\uDD19");
+        System.out.println("B. Back \uD83D\uDD19"); // 🔙
         System.out.println();
     }
 
@@ -226,7 +226,7 @@ public class Menus {
                 System.out.println("2. Search " + dataType + " with the most characters");
                 break;
         }
-        System.out.println("B. Back \uD83D\uDD19");
+        System.out.println("B. Back \uD83D\uDD19"); // 🔙
         System.out.println();
     }
 

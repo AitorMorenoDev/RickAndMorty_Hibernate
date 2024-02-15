@@ -30,7 +30,7 @@ public class CharManagement {
         GeneralManagement.add(character);
     }
 
-    // Edit and Delete
+    // Edit
     public static void editChar() {
 
         Characters character = GeneralManagement.askForEntityToEditOrDelete("edit", Characters.class);
@@ -48,10 +48,13 @@ public class CharManagement {
         GeneralManagement.edit(character);
         System.out.println("Character with Id " + character.getId() + " updated successfully.");
     }
+
+    // Delete
     public static void deleteChar() {
         Characters character = GeneralManagement.askForEntityToEditOrDelete("delete", Characters.class);
 
         assert character != null;
+
         if (GeneralManagement.askToDeleteChar(character).equalsIgnoreCase("y")) {
             GeneralManagement.delete(character);
             System.out.println("Character " + character.getName() + " deleted.");
@@ -74,9 +77,9 @@ public class CharManagement {
         int choice;
         do {
             System.out.println("---------------------------------");
-            System.out.println("1. Alive");
-            System.out.println("2. Dead");
-            System.out.println("3. Unknown");
+            System.out.println("1. Alive \uD83D\uDE4B"); // 🙋
+            System.out.println("2. Dead \uD83D\uDC80"); // 💀
+            System.out.println("3. Unknown ❓"); // ❓
             System.out.println();
             System.out.print("Choose the status: ");
             choice = sc.nextInt();
@@ -95,16 +98,16 @@ public class CharManagement {
         int choice;
         do {
             System.out.println("---------------------------------");
-            System.out.println("1. Alien");
-            System.out.println("2. Animal");
-            System.out.println("3. Cronenberg");
-            System.out.println("4. Disease");
-            System.out.println("5. Human");
-            System.out.println("6. Humanoid");
-            System.out.println("7. Mythological Creature");
-            System.out.println("8. Poopybutthole");
-            System.out.println("9. Robot");
-            System.out.println("10. Unknown");
+            System.out.println("1. Alien \uD83D\uDC7D"); // 👽
+            System.out.println("2. Animal \uD83D\uDC18"); // 🐘
+            System.out.println("3. Cronenberg \uD83D\uDC19"); // 🐙
+            System.out.println("4. Disease \uD83E\uDDA0"); // 🦠
+            System.out.println("5. Human \uD83D\uDC74"); // 👴
+            System.out.println("6. Humanoid \uD83E\uDDCC"); // 🧌
+            System.out.println("7. Mythological Creature \uD83E\uDDDC"); // 🧜
+            System.out.println("8. Poopybutthole \uD83D\uDCA9"); // 💩
+            System.out.println("9. Robot \uD83E\uDD16"); // 🤖
+            System.out.println("10. Unknown ❓");
             System.out.println();
             System.out.print("Choose the species: ");
             choice = sc.nextInt();
@@ -130,10 +133,10 @@ public class CharManagement {
         int choice;
         do {
             System.out.println("---------------------------------");
-            System.out.println("1. Male");
-            System.out.println("2. Female");
-            System.out.println("3. Genderless");
-            System.out.println("4. Unknown");
+            System.out.println("1. Male \uD83D\uDD7A"); // 🕺
+            System.out.println("2. Female \uD83D\uDC83"); // 💃
+            System.out.println("3. Genderless ⛔"); // ⛔
+            System.out.println("4. Unknown ❓");
             System.out.println();
             System.out.print("Choose the gender: ");
             choice = sc.nextInt();

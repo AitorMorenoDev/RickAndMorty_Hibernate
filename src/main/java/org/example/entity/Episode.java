@@ -3,7 +3,7 @@ package org.example.entity;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -13,7 +13,7 @@ public class Episode implements Serializable {
 
     private int id;
     private String name, episode;
-    private Date airDate;
+    private LocalDateTime airDate;
     private Set<Characters> characters = new HashSet<>(0);
 
     @Id
@@ -43,10 +43,10 @@ public class Episode implements Serializable {
     @Basic
     @Column(name = "air_date")
 
-    public Date getAirDate() {
+    public LocalDateTime getAirDate() {
         return airDate;
     }
-    public void setAirDate(Date airDate) {
+    public void setAirDate(LocalDateTime airDate) {
         this.airDate = airDate;
     }
 
