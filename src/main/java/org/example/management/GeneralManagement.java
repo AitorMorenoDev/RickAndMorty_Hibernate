@@ -26,7 +26,6 @@ public class GeneralManagement {
         trans = em.getTransaction();
 
         if (trans != null) {
-            System.out.println("Transaction opened");
             trans.begin();
         } else {
             System.out.println("Error starting transaction");
@@ -40,11 +39,9 @@ public class GeneralManagement {
         }
         if (em.isOpen() && em != null) {
             em.close();
-            System.out.println("EntityManager closed.");
         }
         if (emf.isOpen() && emf != null) {
             emf.close();
-            System.out.println("EntityManagerFactory closed.");
         }
     }
     public static void deactivateLog() {
